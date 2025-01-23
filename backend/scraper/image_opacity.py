@@ -2,7 +2,7 @@ from PIL import Image
 import os
 
 def reduce_opacity(image_path, save_path, opacity):
-   
+    
     img = Image.open(image_path).convert("RGBA")
     
     r, g, b, a = img.split()
