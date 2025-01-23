@@ -5,13 +5,10 @@ def reduce_opacity(image_path, save_path, opacity):
    
     img = Image.open(image_path).convert("RGBA")
     
-    # extract alpha channel
     r, g, b, a = img.split()
     
-    # reduce alpha channel by multiplying with opacity level
     a = a.point(lambda p: int(p * opacity))
     
-    # merge modified alpha channel back with image
     img_with_opacity = Image.merge("RGBA", (r, g, b, a))
     
     img_with_opacity.save(save_path)
