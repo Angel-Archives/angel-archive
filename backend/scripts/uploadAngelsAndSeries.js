@@ -1,3 +1,6 @@
+// retrieves the correct URLs (for images, but not for the rest)
+// fruit series and animal 1 series 
+
 import { createClient } from "@supabase/supabase-js";
 import fs from "fs";
 import path from "path";
@@ -86,10 +89,10 @@ async function insertAngels() {
       const maxAngelsPerSeries = 12;
 
       for (let i = 0; i < Math.min(imageFiles.length, maxAngelsPerSeries); i++) {
-        const baseName = path.basename(imageFiles[i], ".png");  // Strip the .png extension
+        const baseName = path.basename(imageFiles[i], ".png");  
 
         const angelData = {
-          name: `${baseName}`, 
+          name: `${seriesName} - ${baseName}`, 
           series_id: seriesId,
           image: images.images ? images.images[i] : null,
           image_bw: images.images_bw ? images.images_bw[i] : null,
@@ -117,4 +120,5 @@ async function insertAngels() {
   }
 }
 
+// Call the function to insert angels
 insertAngels();
