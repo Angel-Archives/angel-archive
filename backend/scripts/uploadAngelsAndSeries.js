@@ -120,5 +120,4 @@ async function insertAngels() {
   }
 }
 
-// Call the function to insert angels
 insertAngels();
