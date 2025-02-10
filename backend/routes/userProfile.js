@@ -1,7 +1,5 @@
 // make routes RESTful
 
-// editted
-
 import express from "express";
 import {
 	getUserStats,

@@ -1,6 +1,4 @@
-import { supabase } from "../config/supabaseClient.js";
-
-// editted
+import supabase from "../config/supabaseClient.js";
 
 export const getUserStats = async (req, res) => {
 	const { user_id } = req.params;
@@ -32,19 +30,19 @@ export const getUserOwnedAngels = async (req, res) => {
 };
 
 // // mock geolocation for now
-// export const getUsersNearYou = async (req, res) => {
-//     const { data, error } = await supabase
-//         .from("users")
-//         .select("id, username, profile_pic");
+export const getUsersNearYou = async (req, res) => {
+    const { data, error } = await supabase
+        .from("users")
+        .select("id, username, profile_pic");
 
-//     if (error) return res.status(400).json({ error: error.message });
+    if (error) return res.status(400).json({ error: error.message });
 
-//     res.json(data);
-// };
+    res.json(data);
+};
 
 export const updateProfilePicture = async (req, res) => {
 	const { imageId } = req.body;
-	const { user_id } = req.user; // Ensure user_id is extracted correctly
+	const { user_id } = req.user; 
 
 	try {
 		const { data, error } = await supabase

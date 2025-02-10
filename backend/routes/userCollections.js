@@ -1,7 +1,5 @@
 import express from "express";
 
-// editted
-
 import {
 	getUserCollection,
 	updateUserCollection,

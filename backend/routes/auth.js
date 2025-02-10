@@ -1,7 +1,7 @@
 // old, refactor -> also need to include profile pic for users (maybe location for nearby users?)
 
 import express from "express";
-import supabase from "../supabaseClient.js";
+import supabase from "../config/supabaseClient.js";
 
 const router = express.Router();
 

@@ -1,4 +1,4 @@
-import { supabase } from "../config/supabaseClient.js";
+import supabase from "../config/supabaseClient.js";
 
 export const getUserCollection = async (req, res) => {
     const { user_id } = req.params;

@@ -1,7 +1,7 @@
 // old, refactor to fit need -> match RESTful convention 
 
 import express from "express";
-import supabase from "../supabaseClient.js";
+import supabase from "../config/supabaseClient.js";
 
 const router = express.Router();
 

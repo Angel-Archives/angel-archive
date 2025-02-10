@@ -1,14 +1,17 @@
 import './App.css'
+import { BrowserRouter } from 'react-router-dom'
 import { Counter } from './Counter'
-import { SignUpForm } from './SignUpForm'
+import { SignUpForm } from '../components/SignUpForm'
 
 function App() {
   return (
-    <main>
-      <SignUpForm />
-      <h1>Counter App</h1>
-      <Counter />
-    </main>
+    <BrowserRouter>
+      <main>
+        <SignUpForm />
+        <h1>Counter App</h1>
+        <Counter />
+      </main>
+    </BrowserRouter>
   )
 }
 
