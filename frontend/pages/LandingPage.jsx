@@ -1,7 +1,6 @@
 import React from "react";
 import { Box, Button, Paper, Typography } from "@mui/material";
 import { styled } from '@mui/system';
-import { NavBarLanding } from "../components/NavBarLanding";
 import { useTheme } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
@@ -50,8 +49,6 @@ export function LandingPage() {
 
     return (
         <Box sx={{ height: "100vh", overflow: "hidden" }}>
-            <NavBarLanding />
-
             <Box display="flex" height="100vh">
                 <LeftSection />
                 <RightSection>
