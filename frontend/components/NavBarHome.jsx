@@ -24,13 +24,20 @@ export function NavBarHome() {
                     height: { xs: "auto", sm: "80px" },       
                 }}
             >
-                
-                <Box sx={{ ...sectionStyle, display: "flex" }}>
-                    <ApiIcon sx={{ marginRight: "12px", fontSize: "3rem" }} />
-                    <Typography variant="h6" sx={{ fontSize: "1.875rem", fontWeight: "bold" }}>
-                        NavBarHome
+                <Box display="flex" alignItems="center">
+                    <img 
+                        src="../src/assets/AngelArchiveLogo.png" 
+                        alt="Angel Archive Logo" 
+                        style={{ width: "73px", height: "80px", marginRight: "12px", objectFit: "contain" }} 
+                    />
+                    <Typography 
+                        variant="h6" 
+                        sx={{ fontSize: "1.875rem", fontWeight: "bold", display: "flex", alignItems: "center" }}
+                    >
+                        Angel Archive 
                     </Typography>
                 </Box>
+                
                 <Box sx={{ ...sectionStyle }}>
                     <IconButton onClick={handleMenuOpen}>
                         <Avatar

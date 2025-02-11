@@ -4,7 +4,7 @@ import { SonnyAngelMain } from '../components/SonnyAngelMain'
 import {Box, Container, Stack} from "@mui/material"
 
 
-export function HomePage() {
+export function DashboardPage() {
 
     return (
         <Box>
