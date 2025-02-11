@@ -2,6 +2,8 @@ import React from "react";
 import { Box, Button, Paper, Typography } from "@mui/material";
 import { styled } from '@mui/system';
 import { NavBarLanding } from "../components/NavBarLanding";
+import { useTheme } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const LeftSection = styled(Box)({
     width: "45%",
@@ -39,6 +41,13 @@ const JoinButton = styled(Button)({
 });
 
 export function LandingPage() {
+    const theme = useTheme();
+    const navigate = useNavigate();
+
+    const handleJoinNow = () => {
+        navigate("/signup");
+    }
+
     return (
         <Box sx={{ height: "100vh", overflow: "hidden" }}>
             <NavBarLanding />
@@ -64,11 +73,31 @@ export function LandingPage() {
                         </Typography>
                     </Container>
 
-
                     <JoinButtonContainer>
-                        <JoinButton variant="contained" color="primary">
-                            Join Now
-                        </JoinButton>
+                        <Button 
+                            color="inherit" 
+                            variant="outlined" 
+                            sx={{ 
+                                fontSize: '2.5rem', 
+                                height: '96px', 
+                                padding: '20px 40px', 
+                                marginLeft: '16px',
+                                width: '300px', 
+                                borderRadius: "15px", 
+                                backgroundColor: theme.palette.primary.main,
+                                color: theme.palette.primary.contrastText, 
+                                // see if added white border is needed -> can't see since background right now is white 
+                                // border: "2px solid #fff",
+                                // change colors for hover if want to -> prob should, not aesthetically pleasing right now 
+                                '&:hover': {
+                                    backgroundColor: theme.palette.primary.light, 
+                                    borderColor: theme.palette.primary.dark, 
+                                },
+                            }}
+                            onClick={handleJoinNow}
+                        >
+                            Join Now! 
+                        </Button>
                     </JoinButtonContainer>
                 </RightSection>
             </Box>
