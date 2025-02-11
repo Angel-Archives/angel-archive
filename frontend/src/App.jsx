@@ -1,18 +1,14 @@
 import './App.css'
 import { BrowserRouter } from 'react-router-dom'
-import { Counter } from './Counter'
-import { SignUpForm } from '../components/SignUpForm'
+import { LandingPage } from '../pages/LandingPage'
 
 function App() {
   return (
-    <BrowserRouter>
-      <main>
-        <SignUpForm />
-        <h1>Counter App</h1>
-        <Counter />
-      </main>
-    </BrowserRouter>
+    <main>
+      <LandingPage/>
+    </main>
   )
 }
+
 
 export default App
