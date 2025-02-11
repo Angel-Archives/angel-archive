@@ -35,63 +35,74 @@ export function SignUpForm() {
     const handleSubmit = async (e) => {
         e.preventDefault();
     
-        setErrorMessage('');
-        setSuccessMessage('');
+        setErrorMessage("");
+        setSuccessMessage("");
     
         if (!profilePic) {
-            setErrorMessage('Please select a profile picture.');
+            setErrorMessage("Please select a profile picture.");
             return;
         }
     
         if (!email || !password || !username || !profilePic) {
-            setErrorMessage('Please fill in all fields and select a profile picture.');
+            setErrorMessage("Please fill in all fields and select a profile picture.");
             return;
         }
     
         if (password.length < 8) {
-            setErrorMessage('Password must be at least 8 characters.');
+            setErrorMessage("Password must be at least 8 characters.");
             return;
         }
     
-        const { user, error: signUpError } = await supabase.auth.signUp({
+        const { data: existingUsers, error: usernameError } = await supabase
+            .from("users")
+            .select("username")
+            .eq("username", username);
+    
+        if (usernameError) {
+            setErrorMessage("Error checking username availability.");
+            return;
+        }
+    
+        if (existingUsers.length > 0) {
+            setErrorMessage("Username is already taken. Please choose another.");
+            return;
+        }
+    
+        const { data: authData, error: signUpError } = await supabase.auth.signUp({
             email,
             password,
         });
     
-        console.log('User response:', user);
         if (signUpError) {
-            console.log('Sign-up error:', signUpError);
             setErrorMessage(`Sign up error: ${signUpError.message}`);
             return;
         }
     
-        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-    
-        if (sessionError || !session) {
-            setErrorMessage('Error establishing authentication session.');
+        const userId = authData?.user?.id;
+        if (!userId) {
+            setErrorMessage("Authentication failed. Please try again.");
             return;
         }
     
-        const currentUser = session.user;
-    
-        const { data, error: insertError } = await supabase.from('users').insert([
+        const { error: insertError } = await supabase.from("users").insert([
             {
-                id: currentUser.id, 
+                id: userId,
                 email: email,
                 username: username,
-                profile_pic: profilePic, 
+                profile_pic: profilePic,
             }
         ]);
-    
+
+        // future: if email is used, prompt user to log in or change password 
         if (insertError) {
+            await supabase.auth.admin.deleteUser(userId);
             setErrorMessage(`Error inserting user data: ${insertError.message}`);
             return;
         }
     
-        setSuccessMessage('Sign up successful!');
+        setSuccessMessage("Sign up successful!");
         clearForm();
-        console.log('Signed up successfully:', data);
-    };
+        };
     
         const clearForm = () => {
         setEmail("");
@@ -260,3 +271,6 @@ export function SignUpForm() {
         </div>
     );
 }
+
+
+
