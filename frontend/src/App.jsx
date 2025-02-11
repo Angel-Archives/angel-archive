@@ -1,24 +1,14 @@
-import "./App.css"
-import { BrowserRouter } from "react-router-dom"
-// import { Counter } from "../components/Counter"
-import { SignUpForm } from "../components/SignUpForm"
-import { LoginForm } from "../components/LogInForm"
+import './App.css'
+import { BrowserRouter } from 'react-router-dom'
+import { LandingPage } from '../pages/LandingPage'
 
 function App() {
   return (
-    <BrowserRouter>
-      <main>
-        {/* put in sign up page */}
-        <SignUpForm /> 
-
-        {/* put in log in page */}
-        <LoginForm />
-
-        {/* <h1>Counter App</h1>
-        <Counter /> */}
-      </main>
-    </BrowserRouter>
+    <main>
+      <LandingPage/>
+    </main>
   )
 }
+
 
 export default App
