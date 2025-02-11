@@ -9,12 +9,10 @@ export function NavBarLanding() {
                 sx={{ 
                     display: 'flex', 
                     justifyContent: 'space-between', 
-                    padding: { sm: '0 40px' }, 
+                    // padding: { sm: '0' }, 
                     height: '80px' 
                 }}
             >
-
-                {/* Left Section: Icon + Title */}
                 <Box 
                     display="flex" 
                     alignItems="center"
@@ -27,8 +25,6 @@ export function NavBarLanding() {
                         NavBarLanding
                     </Typography>
                 </Box>
-
-                {/* Right Section: Log In and Sign Up Buttons */}
                 <Box 
                     display="flex" 
                     alignItems="center"
