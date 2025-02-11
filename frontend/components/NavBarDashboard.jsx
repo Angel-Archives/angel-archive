@@ -1,18 +1,55 @@
-import React, { useState } from "react";
-import { AppBar, Toolbar, Typography, InputBase, Avatar, Box, Menu, MenuItem, IconButton } from "@mui/material";
-import ApiIcon from '@mui/icons-material/Api';
+import React, { useState, useEffect } from "react";
+import { AppBar, Toolbar, Typography, Box, IconButton, Avatar, Menu, MenuItem } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { LogoutButton } from "./LogOutButton";
+import supabase from "../config/supabaseClient";
 
 const sectionStyle = {
     display: "flex",
     alignItems: "center",
 };
 
-export function NavBarHome() {
-    const [anchorEl, setAnchorEl] = useState(null); // used for dropdown menu
+export function NavBarDashboard() {
+    const navigate = useNavigate();
+    const { user } = useAuth();
+    const [profilePic, setProfilePic] = useState(null);
+    const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
+
+    useEffect(() => {
+        const fetchProfilePic = async () => {
+            if (!user?.id) return;
+
+            try {
+                console.log("Fetching profile pic for user ID:", user.id);
+
+                const { data, error } = await supabase
+                    .from("users") 
+                    .select("profile_pic")
+                    .eq("id", user.id)
+                    .single(); 
+
+                if (error) {
+                    console.error("Error fetching profile pic:", error.message);
+                } else {
+                    console.log("Fetched profile pic:", data?.profile_pic);
+                    setProfilePic(data?.profile_pic);
+                }
+            } catch (err) {
+                console.error("Unexpected error:", err);
+            }
+        };
+
+        fetchProfilePic();
+    }, [user]);
 
     const handleMenuOpen = (event) => setAnchorEl(event.currentTarget);
     const handleClose = () => setAnchorEl(null);
+
+    const handleLogoClick = () => {
+        navigate(user ? "/dashboard" : "/");
+    };
 
     return (
         <AppBar position="sticky">
@@ -20,11 +57,10 @@ export function NavBarHome() {
                 sx={{
                     display: "flex",
                     justifyContent: "space-between",
-                    padding: { xs: "0 20px", sm: "0 40px" },  
-                    height: { xs: "auto", sm: "80px" },       
+                    height: { xs: "auto", sm: "80px" },
                 }}
             >
-                <Box display="flex" alignItems="center">
+                <Box display="flex" alignItems="center" onClick={handleLogoClick} style={{ cursor: "pointer" }}>
                     <img 
                         src="../src/assets/AngelArchiveLogo.png" 
                         alt="Angel Archive Logo" 
@@ -41,7 +77,7 @@ export function NavBarHome() {
                 <Box sx={{ ...sectionStyle }}>
                     <IconButton onClick={handleMenuOpen}>
                         <Avatar
-                            src="/images_profile_pic/Animal_1_2018_Series/circular_Cheetah.png"
+                            src={profilePic || "/default-profile.png"} 
                             alt="Profile"
                             loading="lazy"
                             sx={{ width: "60px", height: "60px" }}
@@ -58,7 +94,9 @@ export function NavBarHome() {
                     >
                         <MenuItem onClick={handleClose}>Profile</MenuItem>
                         <MenuItem onClick={handleClose}>Settings</MenuItem>
-                        <MenuItem onClick={handleClose}>Logout</MenuItem>
+                        <MenuItem>
+                            <LogoutButton />
+                        </MenuItem>
                     </Menu>
                 </Box>
             </Toolbar>
