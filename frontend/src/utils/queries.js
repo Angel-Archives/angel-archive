@@ -12,7 +12,6 @@ export async function fetchAngelsImages() {
     return data;  
 }
 
-// Create a new user in the "users" table after authentication
 export const createUserInDatabase = async (userData) => {
   const { data, error } = await supabase.from("users").insert([userData]);
   if (error) {
