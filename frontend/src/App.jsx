@@ -31,7 +31,20 @@ function App() {
 
 function AuthNav() {
     const { user } = useAuth();
-    return user ? <NavBarDashboard /> : <NavBarLanding />;
+
+    return (
+        <div 
+            style={{
+                position: "sticky", 
+                top: 0, 
+                zIndex: 1000, 
+                backgroundColor: "cyan", 
+                boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)"
+            }}
+        >
+            {user ? <NavBarDashboard /> : <NavBarLanding />}
+        </div>
+    );
 }
 
 export default App;

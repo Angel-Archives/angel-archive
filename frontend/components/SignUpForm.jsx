@@ -3,6 +3,7 @@ import { useAuth } from "../context/AuthContext";
 import supabase from "../config/supabaseClient";
 import { fetchAngelsImages } from "../src/utils/queries";
 import { useNavigate } from "react-router-dom";
+import { TextField, Button, Typography, Paper, CircularProgress, Dialog, Grid, Avatar, Box } from "@mui/material";
 
 export function SignUpForm() {
     const { signUp } = useAuth();
@@ -43,8 +44,8 @@ export function SignUpForm() {
             return;
         }
     
-        if (!email || !password || !username || !profilePic) {
-            setErrorMessage("Please fill in all fields and select a profile picture.");
+        if (!email || !password || !username) {
+            setErrorMessage("Please fill in all fields.");
             return;
         }
     
@@ -88,44 +89,121 @@ export function SignUpForm() {
     };
 
     return (
-        <div>
-            <h2>Sign Up</h2>
+        <Paper 
+            elevation={3} 
+            sx={{
+                padding: { xs: 2, sm: 3 }, 
+                width: "90%", 
+                maxWidth: "350px", 
+                mx: "auto", 
+                mt: 2, 
+                textAlign: "center", 
+                backgroundColor: "rgba(255, 255, 255, 0.95)",
+            }}
+        >
+            <Box display="flex" justifyContent="center" mb={2}>
+                <Avatar 
+                    src={profilePic} 
+                    sx={{ 
+                        width: 70, 
+                        height: 70, 
+                        cursor: "pointer",
+                        border: "2px solid #ddd",
+                    }} 
+                    onClick={toggleImages} 
+                />
+            </Box>
+            <Button 
+                variant="outlined" 
+                fullWidth 
+                onClick={toggleImages}
+                sx={{ marginBottom: 2 }}
+            >
+                {profilePic ? "Change Profile Picture" : "Select Profile Picture"}
+            </Button>
             <form onSubmit={handleSubmit}>
-                <div className="profile-picture-container">
-                    <div className="profile-placeholder" onClick={toggleImages}>
-                        {profilePic ? (
-                            <img src={profilePic} alt="Selected" style={{ width: "100px", height: "100px", objectFit: "cover", borderRadius: "50%" }} />
-                        ) : (
-                            <span className="plus-button" style={{ fontSize: "30px", color: "#4CAF50", cursor: "pointer" }}>+</span>
-                        )}
-                    </div>
-                </div>
-                <button type="button" onClick={toggleImages} style={{ marginTop: "10px", padding: "8px 16px", backgroundColor: "#4CAF50", color: "white", border: "none", borderRadius: "4px", cursor: "pointer" }}>
-                    {profilePic ? "Change Profile Picture" : "Select Profile Picture"}
-                </button>
-                <div><label>Username:</label><input type="text" value={username} onChange={(e) => setUsername(e.target.value)} required /></div>
-                <div><label>Email:</label><input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required /></div>
-                <div><label>Password:</label><input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required /></div>
-                {popupVisible && (
-                    <div style={{ position: "fixed", top: "0", left: "0", right: "0", bottom: "0", backgroundColor: "rgba(0, 0, 0, 0.5)", display: "flex", justifyContent: "center", alignItems: "center" }} onClick={() => setPopupVisible(false)}>
-                        <div style={{ backgroundColor: "white", padding: "20px", borderRadius: "8px", display: "flex", flexDirection: "column", alignItems: "center", width: "80%", maxHeight: "80%", overflowY: "auto" }} onClick={(e) => e.stopPropagation()}>
-                            <h3>Select a Profile Picture</h3>
-                            {loading ? <p>Loading images...</p> : (
-                                <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: "10px", width: "100%" }}>
-                                    {images.map((img) => (
-                                        <div key={img.id} onClick={() => { setProfilePic(img.image_url); setPopupVisible(false); }} style={{ textAlign: "center", cursor: "pointer" }}>
-                                            <img src={img.image_url} alt={img.name} style={{ width: "50px", height: "50px", objectFit: "cover", borderRadius: "50%" }} />
-                                            <p style={{ color: "black" }}>{img.name}</p>
-                                        </div>
-                                    ))}
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                )}
-                {errorMessage && <div style={{ color: "red" }}>{errorMessage}</div>}
-                <button type="submit">Sign Up</button>
+                <TextField label="Username" fullWidth margin="normal" value={username} onChange={(e) => setUsername(e.target.value)} required />
+                <TextField label="Email" type="email" fullWidth margin="normal" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                <TextField label="Password" type="password" fullWidth margin="normal" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                {errorMessage && <Typography color="error" sx={{ marginBottom: 2 }}>{errorMessage}</Typography>}
+                <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 2 }}>Sign Up</Button>
             </form>
-        </div>
+            <Dialog 
+                open={popupVisible} 
+                onClose={() => setPopupVisible(false)} 
+                sx={{ 
+                    "& .MuiDialog-paper": { 
+                        width: "90%", 
+                        maxWidth: "800px", 
+                        padding: 3,
+                        maxHeight: "80vh", 
+                        overflowY: "auto" 
+                    } 
+                }}
+            >
+                <Box display="flex" flexDirection="column" alignItems="center" p={3}>
+                    <Typography 
+                        variant="h5"
+                        gutterBottom
+                        sx={{ 
+                            fontWeight: 700, 
+                            color: "primary.main",
+                            fontSize: { xs: "1.5rem", sm: "2rem" }, 
+                            textAlign: "center",
+                            marginBottom: 2, 
+                        }}
+                    >
+                        Select a Profile Picture
+                    </Typography>
+                    {loading ? <CircularProgress /> : (
+                        <Grid container spacing={2} justifyContent="center">
+                            {images.map((img) => (
+                                <Grid 
+                                    item 
+                                    key={img.id} 
+                                    xs={6} 
+                                    sm={3} 
+                                    onClick={() => { setProfilePic(img.image_url); setPopupVisible(false); }} 
+                                    sx={{ 
+                                        textAlign: "center", 
+                                        cursor: "pointer", 
+                                        display: "flex", 
+                                        flexDirection: "column", 
+                                        alignItems: "center",
+                                        justifyContent: "center" 
+                                    }}
+                                >
+                                    <Avatar 
+                                        src={img.image_url} 
+                                        sx={{ 
+                                            width: 90, 
+                                            height: 90, 
+                                            cursor: "pointer", 
+                                            border: "2px solid #ddd",
+                                            transition: "all 0.3s",
+                                            "&:hover": {
+                                                borderColor: "#4CAF50",
+                                                transform: "scale(1.1)",
+                                            }
+                                        }} 
+                                    />
+                                    <Typography 
+                                        variant="body2" 
+                                        sx={{ 
+                                            marginTop: 1, 
+                                            textAlign: "center", 
+                                            fontWeight: 500,
+                                            fontSize: { xs: "0.875rem", sm: "1rem" } 
+                                        }}
+                                    >
+                                        {img.name}
+                                    </Typography>
+                                </Grid>
+                            ))}
+                        </Grid>
+                    )}
+                </Box>
+            </Dialog>
+        </Paper>
     );
 }
