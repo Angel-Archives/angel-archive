@@ -21,6 +21,12 @@ export function SonnyAngelCard({ id, name, imageUrl, onBookmarkAdd, favList, iso
         src={imageUrl}
         alt={name}
         loading="lazy"
+        style={{
+          width: '100%',          
+          height: 'auto',         
+          objectFit: 'cover',     
+          borderRadius: '8px',    
+        }}
       />
 
 
