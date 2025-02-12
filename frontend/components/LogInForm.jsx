@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 export function LoginForm() {
     const { signIn } = useAuth();
     const navigate = useNavigate();
-    const [identifier, setIdentifier] = useState("");  // username or email
+    const [identifier, setIdentifier] = useState("");
     const [password, setPassword] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
 

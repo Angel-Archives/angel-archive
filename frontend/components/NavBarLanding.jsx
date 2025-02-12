@@ -9,7 +9,6 @@ export function NavBarLanding() {
     const theme = useTheme();
     const { user } = useAuth();
     
-    // Use useMediaQuery to make the buttons responsive
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
     const handleSignUp = () => {
@@ -42,7 +41,7 @@ export function NavBarLanding() {
                         sx={{
                             fontSize: "1.875rem", 
                             fontWeight: "bold", 
-                            display: isMobile ? 'none' : 'flex', // Hide on mobile
+                            display: isMobile ? 'none' : 'flex',
                             alignItems: "center",
                             whiteSpace: 'nowrap',
                         }}
@@ -57,11 +56,11 @@ export function NavBarLanding() {
                             color="inherit"
                             variant="outlined"
                             sx={{
-                                fontSize: isMobile ? '1rem' : '1.25rem', // Smaller font size on mobile
+                                fontSize: isMobile ? '1rem' : '1.25rem',
                                 height: '48px',
                                 padding: '10px 20px',
                                 marginLeft: '16px',
-                                width: isMobile ? 'calc(50% - 8px)' : '150px',  // 50% width on mobile with padding
+                                width: isMobile ? 'calc(50% - 8px)' : '150px',
                                 display: 'inline-flex',
                                 alignItems: 'center',
                                 '&:hover': {
