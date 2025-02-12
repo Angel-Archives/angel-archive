@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import supabase from "../config/supabaseClient";
-import { fetchAngelsImages } from "../src/utils/queries";
+import { fetchAngelsProfileImages } from "../src/utils/queries";
 import { useNavigate } from "react-router-dom";
 import { TextField, Button, Typography, Paper, CircularProgress, Dialog, Grid, Avatar, Box } from "@mui/material";
 
@@ -19,7 +19,7 @@ export function SignUpForm() {
 
     useEffect(() => {
         const loadImages = async () => {
-            const angels = await fetchAngelsImages();
+            const angels = await fetchAngelsProfileImages();
             if (angels.length) {
                 setImages(angels.map(angel => ({
                     ...angel,
