@@ -1,0 +1,13 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+  }
+  
+  /* Root div (main container) */
+  #root {
+    /* padding:x; */
+    background-color: #pink; /* Light cyan background for the main container */
+  }
