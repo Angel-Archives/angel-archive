@@ -1,14 +1,16 @@
-/* Reset margin and padding for the entire document */
+
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  /* Ensure that body and html take up full height */
-  root {
-    height: 100%;
-    width: 100%;
-    color:purple
-  }
-  
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+#root {
+  height: 100%;
+}

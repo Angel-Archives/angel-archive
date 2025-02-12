@@ -5,9 +5,22 @@ body {
     padding: 0;
     background-color: #f4f4f4;
   }
-  
-  /* Root div (main container) */
+
   #root {
     /* padding:x; */
-    background-color: #pink; /* Light cyan background for the main container */
+    background-color: #pink; 
   }
+
+
+  html {
+    height: '100%',
+    margin: 0, 
+},
+body {
+    height: '100%',
+    margin: 0, 
+    overflow: 'hidden', 
+},
+'#root': {
+    height: '100%',  
+}
