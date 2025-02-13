@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import supabase from "../config/supabaseClient";
+import { Typography } from "@mui/material";
 
 export function Counter({ userId, angelId, angelName, initialCount }) {
     const [counter, setCounter] = useState(() => {
@@ -54,10 +55,38 @@ export function Counter({ userId, angelId, angelName, initialCount }) {
     }, [initialCount]);
 
     return (
-        <div>
-            <button onClick={handleDecrement}>-</button>
-            <span style={{ margin: "0 10px" }}>{counter}</span> 
-            <button onClick={handleIncrement}>+</button>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Typography
+                component="span"
+                sx={{
+                    color: "primary.dark", 
+                    fontWeight: "bold", 
+                    cursor: "pointer", 
+                    fontSize: "24px", 
+                    padding: "0 12px"
+                }}
+                onClick={handleDecrement}
+            >
+                -
+            </Typography>
+            
+            <span style={{ margin: "0 10px", fontSize: "22px", fontWeight: "600", color: "black" }}>
+                {counter}
+            </span> 
+
+            <Typography
+                component="span"
+                sx={{
+                    color: "primary.dark", 
+                    fontWeight: "bold", 
+                    cursor: "pointer", 
+                    fontSize: "24px", 
+                    padding: "0 12px"
+                }}
+                onClick={handleIncrement}
+            >
+                +
+            </Typography>
         </div>
     );
 }

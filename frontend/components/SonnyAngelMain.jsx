@@ -87,28 +87,29 @@ export function SonnyAngelMain({ toggleLeftBar }) {
 
   return (
     <Box
-      bgcolor={"lightcoral"}
+      // bgcolor={"lightcoral"}
       flex={4}
       p={2}
       onClick={() => isMobile && toggleLeftBar()} 
-      sx={{ cursor: isMobile ? "pointer" : "default" }} 
+      sx={{ cursor: isMobile ? "pointer" : "default",}}
     >
       <Typography variant="h4" gutterBottom>
-        Cards
+        Full Collection
       </Typography>
       <SearchBar options={images.map((angel) => angel.name)} onSearch={setSearchTerm} />
-      <Grid container spacing={3} justifyContent="center">
+      <Grid container spacing={3} justifyContent="flex-start">
         {loading ? (
           <Typography variant="body1">Loading images...</Typography>
         ) : (
-          filteredImages.map((item) => (
-            <Grid item key={item.id} xs={12} sm={6} md={4} lg={3}>
+          filteredImages.map((angel) => (
+            <Grid item key={angel.id} xs={6} sm={4} md={3} lg={2}>
               <SonnyAngelCard
-                id={item.id}
-                name={item.name}
-                imageUrl={item.imageUrl}
+                id={angel.id}
+                name={angel.name}
+                imageUrl={angel.imageUrl}
                 userId={userId}
                 onBookmarkAdd={handleBookmarkAdd}
+                initialCount={angel.angel_count}
               />
             </Grid>
           ))

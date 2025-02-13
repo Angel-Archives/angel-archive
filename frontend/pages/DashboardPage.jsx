@@ -39,7 +39,13 @@ export function DashboardPage() {
           height: "100vh",
           overflowY: "auto",
           padding: 2,
-          backgroundColor: "lightcoral",
+          // backgroundColor: "lightcoral",
+
+          backgroundImage: "url('/src/assets/AngelArchiveBackground4.jpg')",
+          backgroundSize: "100% auto",
+          backgroundPosition: "center",
+          backgroundRepeat: "repeat",
+          padding: "20px", 
           transition: "margin-left 0.3s ease-in-out",
         }}
       >
