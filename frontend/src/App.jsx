@@ -15,23 +15,6 @@ function ProtectedRoute({ children }) {
     return user ? children : <Navigate to="/" />;
 }
 
-function App() {
-    return (
-        <Router>
-            <AuthProvider>  
-                <AuthNav />  
-                {/* <ToastContainer />  */}
-                <Routes>
-                    <Route path="/" element={<LandingPage />} />
-                    <Route path="/signup" element={<SignUpPage />} />
-                    <Route path="/login" element={<LoginPage />} />
-                    <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
-                </Routes>
-            </AuthProvider>
-        </Router>
-    );
-}
-
 function AuthNav() {
     const { user } = useAuth();
 
@@ -47,6 +30,23 @@ function AuthNav() {
         >
             {user ? <NavBarDashboard /> : <NavBarLanding />}
         </div>
+    );
+}
+
+function App() {
+    return (
+        <Router>
+            <AuthProvider>  
+                <AuthNav />  
+                {/* <ToastContainer />  */}
+                <Routes>
+                    <Route path="/" element={<LandingPage />} />
+                    <Route path="/signup" element={<SignUpPage />} />
+                    <Route path="/login" element={<LoginPage />} />
+                    <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
+                </Routes>
+            </AuthProvider>
+        </Router>
     );
 }
 

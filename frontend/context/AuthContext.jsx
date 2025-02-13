@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import supabase from "../config/supabaseClient";
 
 const AuthContext = createContext();
@@ -10,14 +9,24 @@ export function useAuth() {
 
 export function AuthProvider({ children }) {
     const [user, setUser] = useState(null);
-    const navigate = useNavigate();
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const checkUser = async () => {
             const { data } = await supabase.auth.getUser();
             setUser(data?.user || null);
+            setLoading(false);
         };
+
         checkUser();
+
+        const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+            setUser(session?.user || null);
+        });
+
+        return () => {
+            listener?.subscription?.unsubscribe();
+        };
     }, []);
 
     const signIn = async (identifier, password) => {
@@ -40,18 +49,16 @@ export function AuthProvider({ children }) {
 
         const { data: sessionData } = await supabase.auth.getUser();
         setUser(sessionData?.user);
-        navigate("/dashboard"); 
     };
 
     const signOut = async () => {
         await supabase.auth.signOut();
         setUser(null);
-        navigate("/"); 
     };
 
     return (
-        <AuthContext.Provider value={{ user, signIn, signOut }}>
-            {children}
+        <AuthContext.Provider value={{ user, loading, signIn, signOut }}>
+            {!loading && children}
         </AuthContext.Provider>
     );
 }
