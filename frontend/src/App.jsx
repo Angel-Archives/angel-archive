@@ -7,6 +7,7 @@ import LoginPage from "../pages/LogInPage";
 import { DashboardPage } from "../pages/DashboardPage";  
 import { NavBarDashboard } from "../components/NavBarDashboard";  
 import { NavBarLanding } from "../components/NavBarLanding";  
+import { ProfilePage } from "../pages/ProfilePage";
 // import { ToastContainer } from "react-toastify"; 
 // import "react-toastify/dist/ReactToastify.css";  
 
@@ -44,6 +45,7 @@ function App() {
                     <Route path="/signup" element={<SignUpPage />} />
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
+                    <Route path="/profile" element={<ProfilePage />} />
                 </Routes>
             </AuthProvider>
         </Router>

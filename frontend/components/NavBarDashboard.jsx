@@ -92,7 +92,12 @@ export function NavBarDashboard() {
                         anchorOrigin={{ vertical: "top", horizontal: "right" }}
                         transformOrigin={{ vertical: "top", horizontal: "right" }}
                     >
-                        <MenuItem onClick={handleClose}>Profile</MenuItem>
+                        <MenuItem onClick={() => { 
+                            handleClose(); 
+                            navigate("/profile"); 
+                        }}>
+                            Profile
+                        </MenuItem>                        
                         <MenuItem onClick={handleClose}>Settings</MenuItem>
                         <MenuItem>
                             <LogoutButton />
