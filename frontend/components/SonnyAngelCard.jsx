@@ -1,57 +1,39 @@
 import { useState } from "react";
 import { Counter } from "./Counter";
+import "../src/App.css";
 
 export function SonnyAngelCard({ id, name, imageUrl, onBookmarkAdd, userId, initialCount }) {
   const [showBookmarkOptions, setShowBookmarkOptions] = useState(false);
 
   const handleBookmarkClick = (type) => {
-      onBookmarkAdd(type, id, name); 
+    onBookmarkAdd(type, id, name);
   };
 
   return (
-      <div
-          style={{ backgroundColor: "pink", position: "relative" }} 
-          className="sonny-angel"
-          onMouseEnter={() => setShowBookmarkOptions(true)}
-          onMouseLeave={() => setShowBookmarkOptions(false)}
-      >
-          <p className="name">{name}</p>
+    <div
+      className="sonny-angel-card"
+      onMouseEnter={() => setShowBookmarkOptions(true)}
+      onMouseLeave={() => setShowBookmarkOptions(false)}
+    >
+      <p className="name">{name}</p>
 
-          <img
-              src={imageUrl}
-              alt={name}
-              loading="lazy"
-              style={{
-                  width: '100%',          
-                  height: 'auto',         
-                  objectFit: 'cover',     
-                  borderRadius: '8px',    
-              }}
-          />
+      <img src={imageUrl} alt={name} loading="lazy" className="image" />
 
-          {showBookmarkOptions && (
-              <div
-                  style={{
-                      position: "absolute", 
-                      top: "10px", 
-                      right: "10px", 
-                      backgroundColor: "white", 
-                      border: "1px solid #ccc", 
-                      borderRadius: "8px", 
-                      padding: "8px", 
-                      display: "flex",
-                      flexDirection: "column", 
-                      gap: "4px", 
-                      boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)", 
-                  }}
-              >
-                  <button onClick={() => handleBookmarkClick('FAV')}>FAV</button>
-                  <button onClick={() => handleBookmarkClick('ISO')}>ISO</button>
-                  <button onClick={() => handleBookmarkClick('WTT')}>WTT</button>
-              </div>
-          )}
+      {showBookmarkOptions && (
+        <div className="bookmark-options">
+          {["FAV", "ISO", "WTT"].map((type) => (
+            <button
+              key={type}
+              className="bookmark-btn"
+              onClick={() => handleBookmarkClick(type)}
+            >
+              {type}
+            </button>
+          ))}
+        </div>
+      )}
 
-          <Counter userId={userId} angelId={id} angelName={name} initialCount={initialCount} />
-      </div>
+      <Counter userId={userId} angelId={id} angelName={name} initialCount={initialCount} />
+    </div>
   );
 }
