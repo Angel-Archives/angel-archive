@@ -7,6 +7,8 @@ import LoginPage from "../pages/LogInPage";
 import { DashboardPage } from "../pages/DashboardPage";  
 import { NavBarDashboard } from "../components/NavBarDashboard";  
 import { NavBarLanding } from "../components/NavBarLanding";  
+// import { ToastContainer } from "react-toastify"; 
+// import "react-toastify/dist/ReactToastify.css";  
 
 function ProtectedRoute({ children }) {
     const { user } = useAuth();
@@ -18,6 +20,7 @@ function App() {
         <Router>
             <AuthProvider>  
                 <AuthNav />  
+                {/* <ToastContainer />  */}
                 <Routes>
                     <Route path="/" element={<LandingPage />} />
                     <Route path="/signup" element={<SignUpPage />} />

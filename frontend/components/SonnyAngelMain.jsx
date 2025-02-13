@@ -2,13 +2,12 @@ import React, { useState, useEffect } from "react";
 import { Box, Grid, Typography } from "@mui/material";
 import { SonnyAngelCard } from "./SonnyAngelCard";
 import { fetchAngelsBWImages } from "../src/utils/queries";
+import supabase from "../config/supabaseClient";
 
 export function SonnyAngelMain() {
   const [images, setImages] = useState([]);  
   const [loading, setLoading] = useState(true); 
-  const [favList, setFavList] = useState(new Set());
-  const [isoList, setIsoList] = useState(new Set());
-  const [wttList, setWttList] = useState(new Set());
+  const [userId, setUserId] = useState(null);
 
   useEffect(() => {
     const loadImages = async () => {
@@ -24,21 +23,56 @@ export function SonnyAngelMain() {
       }
       setLoading(false);
     };
-    loadImages();
-  }, []);
-  
 
-  const handleBookmarkAdd = (type, id, name) => {
-    const updateList = (prevList) => {
-      const updatedList = new Set(prevList);
-      updatedList.has(id) ? updatedList.delete(id) : updatedList.add(id);
-      return updatedList;
+    const getUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        setUserId(user.id);
+      }
     };
 
-    if (type === "FAV") setFavList(updateList);
-    if (type === "ISO") setIsoList(updateList);
-    if (type === "WTT") setWttList(updateList);
-  };
+    loadImages();
+    getUser();
+  }, []);
+
+  const handleBookmarkAdd = async (type, angelId, angelName) => {
+    if (!userId) return;
+
+    let updateFields = {
+        angels_name: angelName, 
+    };
+
+    switch (type) {
+        case "FAV":
+            updateFields.is_favorite = true;
+            break;
+        case "ISO":
+            updateFields.in_search_of = true;
+            break;
+        case "WTT":
+            updateFields.willing_to_trade = true;
+            break;
+        default:
+            return;
+    }
+
+    const { data, error } = await supabase
+        .from("user_collections")
+        .upsert([
+            {
+                users_id: userId,
+                angels_id: angelId,
+                angels_name: angelName,  
+                ...updateFields
+            }
+        ], { onConflict: ["users_id", "angels_id"] });
+
+    if (error) {
+        console.error("Error updating bookmark:", error);
+    } else {
+        console.log("Bookmark updated successfully:", data);
+    }
+};
 
   return (
     <Box bgcolor={"lightcoral"} flex={4} p={2}>
@@ -55,34 +89,14 @@ export function SonnyAngelMain() {
                 id={item.id}
                 name={item.name}
                 imageUrl={item.imageUrl}
-                onBookmarkAdd={handleBookmarkAdd}
-                favList={favList}
-                isoList={isoList}
-                wttList={wttList}
+                userId={userId}
+                onBookmarkAdd={handleBookmarkAdd}  
               />
             </Grid>
           ))
         )}
       </Grid>
-
-      <Typography variant="h4" gutterBottom style={{ marginTop: "20px" }}>
-        Bookmark Lists
-      </Typography>
-
-      {[
-        { title: "Favorites", list: favList },
-        { title: "ISO", list: isoList },
-        { title: "WTT", list: wttList },
-      ].map(({ title, list }) => (
-        <div key={title}>
-          <Typography variant="h6">{title}</Typography>
-          <ul>
-            {Array.from(list).map((id) => (
-              <li key={id}>{images.find((item) => item.id === id)?.name}</li>
-            ))}
-          </ul>
-        </div>
-      ))}
     </Box>
   );
 }
+
