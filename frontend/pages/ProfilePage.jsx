@@ -20,23 +20,44 @@ export const ProfilePage = () => {
                     .from("users")
                     .select("username")
                     .eq("id", user.id)
-                    .single();  
+                    .single();
 
                 if (error) {
                     console.error("Error fetching username:", error);
                 } else {
-                    setUsername(data?.username);  
+                    setUsername(data?.username);
                 }
 
                 const { data: userAngels, error: angelsError } = await supabase
                     .from("user_collections")
-                    .select("angels_id, angels_name")
+                    .select("angels_id")  
                     .eq("users_id", user.id);
 
                 if (angelsError) {
                     console.error("Error fetching user collections:", angelsError);
                 } else {
-                    setAngels(userAngels); 
+                    const angelsWithImages = await Promise.all(
+                        userAngels.map(async (angel) => {
+                            const { data: angelDetails, error: angelDetailsError } = await supabase
+                                .from("angels")
+                                .select("name, image")  
+                                .eq("id", angel.angels_id)  
+                                .single();
+
+                            if (angelDetailsError) {
+                                console.error("Error fetching angel details:", angelDetailsError);
+                            }
+
+                            const imageUrl = `https://axvoarmndarkuqawtqss.supabase.co/storage/v1/object/public/sonny_angel_images/${angelDetails?.image}`;
+
+                            return {
+                                angels_id: angel.angels_id,
+                                angels_name: angelDetails?.name,
+                                angels_image_url: imageUrl  
+                            };
+                        })
+                    );
+                    setAngels(angelsWithImages);
                 }
             }
             setLoading(false);
@@ -73,6 +94,7 @@ export const ProfilePage = () => {
                             <SonnyAngelCard
                                 id={angel.angels_id}
                                 name={angel.angels_name}
+                                imageUrl={angel.angels_image_url}  // Pass full image URL to the card
                                 userId={userId}
                             />
                         </Grid>
