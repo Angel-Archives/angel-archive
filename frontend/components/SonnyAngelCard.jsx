@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Counter } from "./Counter";
 
-export function SonnyAngelCard({ id, name, imageUrl, onBookmarkAdd, userId }) {
+export function SonnyAngelCard({ id, name, imageUrl, onBookmarkAdd, userId, initialCount }) {
   const [showBookmarkOptions, setShowBookmarkOptions] = useState(false);
 
   const handleBookmarkClick = (type) => {
@@ -51,7 +51,7 @@ export function SonnyAngelCard({ id, name, imageUrl, onBookmarkAdd, userId }) {
               </div>
           )}
 
-          <Counter userId={userId} angelId={id} angelName={name} />
+          <Counter userId={userId} angelId={id} angelName={name} initialCount={initialCount} />
       </div>
   );
 }
