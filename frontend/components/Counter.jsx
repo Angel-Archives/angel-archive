@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import supabase from "../config/supabaseClient";
 
-export function Counter({ userId, angelId, angelName }) {  
-    const [counter, setCounter] = useState(0);
+export function Counter({ userId, angelId, angelName, initialCount }) {
+    const [counter, setCounter] = useState(() => {
+        return Number.isNaN(Number(initialCount)) ? 0 : Number(initialCount);
+    });
 
     const updateUserCollection = async (newCount) => {
         const timestamp = new Date().toISOString();
@@ -15,10 +17,10 @@ export function Counter({ userId, angelId, angelName }) {
         } else {
             const { data, error } = await supabase
                 .from("user_collections")
-                .upsert([{ 
-                    users_id: userId, 
-                    angels_id: angelId, 
-                    angels_name: angelName,  
+                .upsert([{
+                    users_id: userId,
+                    angels_id: angelId,
+                    angels_name: angelName,
                     count: newCount,
                     is_favorite: false,
                     in_search_of: false,
@@ -31,25 +33,30 @@ export function Counter({ userId, angelId, angelName }) {
     };
 
     const handleDecrement = async () => {
-        setCounter(prev => {
-            const newCount = Math.max(prev - 1, 0);
-            updateUserCollection(newCount);
+        setCounter((prev) => {
+            const newCount = Math.max(prev - 1, 0); 
+            updateUserCollection(newCount); 
             return newCount;
         });
     };
 
     const handleIncrement = async () => {
-        setCounter(prev => {
+        setCounter((prev) => {
             const newCount = prev + 1;
-            updateUserCollection(newCount);
+            updateUserCollection(newCount); 
             return newCount;
         });
     };
 
+    useEffect(() => {
+        const validInitialCount = Number.isNaN(Number(initialCount)) ? 0 : Number(initialCount);
+        setCounter(validInitialCount);
+    }, [initialCount]);
+
     return (
         <div>
             <button onClick={handleDecrement}>-</button>
-            <span>{counter}</span>
+            <span style={{ margin: "0 10px" }}>{counter}</span> 
             <button onClick={handleIncrement}>+</button>
         </div>
     );
