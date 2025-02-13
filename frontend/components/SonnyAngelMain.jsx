@@ -13,40 +13,72 @@ export function SonnyAngelMain({ toggleLeftBar }) {
 
   const isMobile = useMediaQuery("(max-width:600px)");
 
-  // Load images and user data
   useEffect(() => {
-    const loadImagesAndUser = async () => {
+    const loadImages = async () => {
       const angels = await fetchAngelsImages();
-      setImages(
-        angels.map((angel) => ({
-          id: angel.id,
-          name: angel.name,
-          imageUrl: `https://axvoarmndarkuqawtqss.supabase.co/storage/v1/object/public/sonny_angel_images/${angel.image_bw}`,
-        }))
-      );
-
-      const { data: { user } } = await supabase.auth.getUser();
-      setUserId(user?.id || null);
-
+      if (angels.length) {
+        setImages(
+          angels.map((angel) => ({
+            id: angel.id,
+            name: angel.name,
+            imageUrl: `https://axvoarmndarkuqawtqss.supabase.co/storage/v1/object/public/sonny_angel_images/${angel.image_bw}`,
+          }))
+        );
+      }
       setLoading(false);
     };
 
-    loadImagesAndUser();
+    const getUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        setUserId(user.id);
+      }
+    };
+
+    loadImages();
+    getUser();
   }, []);
 
   const handleBookmarkAdd = async (type, angelId, angelName) => {
     if (!userId) return;
 
-    const updateFields = { angels_name: angelName, [`${type.toLowerCase()}`]: true };
+    let updateFields = {
+      angels_name: angelName,
+    };
 
-    const { error } = await supabase
+    switch (type) {
+      case "FAV":
+        updateFields.is_favorite = true;
+        break;
+      case "ISO":
+        updateFields.in_search_of = true;
+        break;
+      case "WTT":
+        updateFields.willing_to_trade = true;
+        break;
+      default:
+        return;
+    }
+
+    const { data, error } = await supabase
       .from("user_collections")
       .upsert(
-        [{ users_id: userId, angels_id: angelId, angels_name: angelName, ...updateFields }],
+        [
+          {
+            users_id: userId,
+            angels_id: angelId,
+            angels_name: angelName,
+            ...updateFields,
+          },
+        ],
         { onConflict: ["users_id", "angels_id"] }
       );
 
-    if (error) console.error("Error updating bookmark:", error);
+    if (error) {
+      console.error("Error updating bookmark:", error);
+    } else {
+      console.log("Bookmark updated successfully:", data);
+    }
   };
 
   const filteredImages = images.filter((angel) =>
@@ -55,10 +87,11 @@ export function SonnyAngelMain({ toggleLeftBar }) {
 
   return (
     <Box
+      // bgcolor={"lightcoral"}
       flex={4}
       p={2}
-      onClick={() => isMobile && toggleLeftBar()}
-      sx={{ cursor: isMobile ? "pointer" : "default" }}
+      onClick={() => isMobile && toggleLeftBar()} 
+      sx={{ cursor: isMobile ? "pointer" : "default",}}
     >
       <Typography variant="h4" gutterBottom>
         Full Collection
