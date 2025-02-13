@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { AppBar, Toolbar, Typography, Box, IconButton, Avatar, Menu, MenuItem } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { LogoutButton } from "./LogOutButton";
+// import { LogoutButton } from "./LogOutButton";
 import supabase from "../config/supabaseClient";
 
 const sectionStyle = {
@@ -11,6 +11,7 @@ const sectionStyle = {
 };
 
 export function NavBarDashboard() {
+    const { signOut } = useAuth();
     const navigate = useNavigate();
     const { user } = useAuth();
     const [profilePic, setProfilePic] = useState(null);
@@ -98,9 +99,10 @@ export function NavBarDashboard() {
                         }}>
                             Profile
                         </MenuItem>                        
-                        <MenuItem onClick={handleClose}>Settings</MenuItem>
-                        <MenuItem>
-                            <LogoutButton />
+                        {/* <MenuItem onClick={handleClose}>Settings</MenuItem> */}
+                        <MenuItem onClick={signOut}>
+                            Log Out
+                            {/* <LogoutButton /> */}
                         </MenuItem>
                     </Menu>
                 </Box>
@@ -108,3 +110,12 @@ export function NavBarDashboard() {
         </AppBar>
     );
 }
+
+// import React from "react";
+// import { useAuth } from "../context/AuthContext";
+
+// export function LogoutButton() {
+//     const { signOut } = useAuth();
+
+//     return <button onClick={signOut}>Logout</button>;
+// }
