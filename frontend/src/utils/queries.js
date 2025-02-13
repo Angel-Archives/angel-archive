@@ -12,10 +12,10 @@ export async function fetchAngelsProfileImages() {
     return data.sort((a, b) => a.name.localeCompare(b.name));
 }
 
-export async function fetchAngelsBWImages() {
+export async function fetchAngelsImages() {
   const { data, error } = await supabase
       .from("angels") 
-      .select("id, name, image_bw");  
+      .select("id, name, image_bw, image, image_opacity");  
   if (error) {
       console.error("Error fetching angel images:", error);
       return [];
@@ -27,6 +27,8 @@ export async function fetchAngelsBWImages() {
       id: angel.id,
       name: angel.name,
       image_bw: angel.image_bw,
+      image: angel.image,
+      image_opacity: angel.image_opacity
   }));
 }
 
